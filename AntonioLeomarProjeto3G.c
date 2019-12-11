@@ -1,9 +1,16 @@
+//UEPB-UNIVERSIDADE ESTADUAL DA PARAIBA
+//DISCIPLINA: LABORATÓRIO DE PROGRAMAÇÃO I
+//PROF: DANILO ABREU
+//ALUNO; ANTONIO LEOMAR FERREIRA SOARES
+//ATIVIDADE: PROJETO FINAL
+
+
+//BILBIOTECAS UTILIZADAS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <windows.h> //biblioteca para uso da função gotoxy e Sleep
-
 
 //-----------------------------------------------------------------------------------
 //Constantes e variáveis Globais
@@ -29,14 +36,6 @@ typedef struct{
     char membro[5][50]; //limite de 5 pessoas por grupos
 }EVENTO;
 
-typedef struct{
-    int capacidade;
-    char local[50];
-    int cargaHoraria;
-    int horario; //considerado horas interias. Ex.: 10h, 11h
-    char tema[50];
-    PARTICIPANTE *membro; //VARIAVEL TIPO PARTICIPANTE
-}EVENTO2;
 
 //ESTRUTURA QUE RECEBERÁ O CONJUNTO DE DADOS DO CONTATO E O ENDEREÇO DO PROXIMO ELEMENTO DA LISTA (O CONTATO A SEGUIR)
 typedef struct elemento{
@@ -51,12 +50,6 @@ typedef struct elemento2{
     struct elemento2 *prox;//ESTE CAMPO SERÁ UM PONTEIRO PARA O PRÓXIMO ELEMENTO DA LISTA (QUE TAMBÉM SERÁ DO "TIPO" STRUCT ELEMENTO)
 } ELEM2;
 
-//CRIADO NOVO ELEMENTO!!!
-typedef struct elemento3{
-    EVENTO2 dados;//AQUI, SERÁ ARMAZENADOS OS DADOS DO CONTATO
-    struct elemento3 *ant;//ESTE CAMPO SERÁ UM PONTEIRO PARA O ANTERIOR ELEMENTO DA LISTA (QUE TAMBÉM SERÁ DO "TIPO" STRUCT ELEMENTO)
-    struct elemento3 *prox;//ESTE CAMPO SERÁ UM PONTEIRO PARA O PRÓXIMO ELEMENTO DA LISTA (QUE TAMBÉM SERÁ DO "TIPO" STRUCT ELEMENTO)
-} ELEM3;
 
 //A ESTRUTURA ABAIXO TERA O APONTADOR DO PRIMEIRO ELEMENTO DA LISTA
 typedef struct{
@@ -66,10 +59,6 @@ typedef struct{
 typedef struct{
     ELEM2 *inicio; //ESTRUTURA QUE RECEBERÁ O PRIMEIRO ELEMENTO (DADOS DO CONTATO E PROXIMO ELEMENTO) DA LISTA
 }LISTA2;
-
-typedef struct{
-    ELEM3 *inicio; //ESTRUTURA QUE RECEBERÁ O PRIMEIRO ELEMENTO (DADOS DO CONTATO E PROXIMO ELEMENTO) DA LISTA
-}LISTA3;
 
 
 //-----------------------------------------------------------------------------------
@@ -92,6 +81,7 @@ void cabecalho(){
 // CRIAR: ---------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
+//FUNÇÃO QUE RETORNA O ENDEREÇO DE MEMÓRIA DE UMA LISTA VAZIA.
 LISTA* criar(){
     LISTA* li = (LISTA*) malloc(sizeof(LISTA)); //ALOCA O ESPAÇO NA MEMÓRIA
     if(li != NULL) //SE O SISTEMA OPERACIONAL ALOCAR, ENTRA NO IF.
@@ -100,16 +90,7 @@ LISTA* criar(){
     }
     return li;//RETORNA O ENDEREÇO DA LISTA
 }
-// CRIAR LISTA DE EVENTOS: ------------------------------------------------------------
-//-------------------------------------------------------------------------------------
-LISTA* criar2(){
-    LISTA3* li = (LISTA3*) malloc(sizeof(LISTA3)); //ALOCA O ESPAÇO NA MEMÓRIA
-    if(li != NULL) //SE O SISTEMA OPERACIONAL ALOCAR, ENTRA NO IF.
-    {
-        li->inicio= NULL; //INICIA A POSIÇÃO INICIAL COM NULL
-    }
-    return li;//RETORNA O ENDEREÇO DA LISTA
-}
+
 
 // FUNÇÃO MENU 1: ---------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
@@ -219,13 +200,12 @@ void cadastrarParticipante(int o1, PARTICIPANTE *c){
     //gotoxy(ALIN,22);system("pause");
 }
 
-
 // FUNÇÃO CADASTRAR EVENTOS -----------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
-void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li, LISTA3 *li1, LISTA3 *li2, LISTA3 *li3, LISTA3 *li4){ //RECEBER LISTA EX.: PALESTRANTE
+void cadastrarEvento(int o1, EVENTO *d){
     system("cls"); //Limpar tela
-    int op, escolha;
+    int op;
 
     cabecalho();
     gotoxy(ALIN,9);printf("#MENU 3: Cadastrar evento");
@@ -235,7 +215,7 @@ void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li, LISTA3 *li1, LISTA3 *li2, LI
     gotoxy(ALIN,15);printf("CARGA HORARIA:");
     gotoxy(ALIN,16);printf("HORARIO:");
     gotoxy(ALIN,17);printf("TEMA:");
-    gotoxy(ALIN,18);printf("CODIGO DO PALESTRANTE:");
+    gotoxy(ALIN,18);printf("MEMBRO:");
     gotoxy(ALIN,20);printf("______________________________________________________");
     setbuf(stdin,NULL);
 
@@ -273,6 +253,7 @@ void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li, LISTA3 *li1, LISTA3 *li2, LI
         }
     }
 
+    //gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
     setbuf(stdin,NULL);
     gotoxy(ALIN+6,14);gets(d->local);
     setbuf(stdin,NULL);
@@ -297,63 +278,8 @@ void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li, LISTA3 *li1, LISTA3 *li2, LI
     setbuf(stdin,NULL);
     gotoxy(ALIN+5,17);gets(d->tema);
     setbuf(stdin,NULL);
-
-
-    //OPÇÃO DE INSERÇÃO DO PARTICIPANTE NO EVENTO
-    int tam, cont=0, qtdTotal;
-    char nomePalestrante[50];
-    tam=tamanho(li);
-    gotoxy(ALIN+22,18);scanf("%d",&escolha);
-
-    while(escolha>tam){ //SE A ESCOLHA ESTIVER ACIMA DO NUMERO DE PALESTRANTES
-        gotoxy(ALIN+22,18);scanf("%d",&escolha);
-    }
-
-    ELEM* aux = li->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
-
-    while(aux!=NULL){
-        cont++;
-        if(cont==escolha){
-            strcpy(nomePalestrante[50],aux->dados.nome);
-            qtdTotal=quantidadePalestranteEmEvento(li1,nomePalestrante)+quantidadePalestranteEmEvento(li2,nomePalestrante)+ quantidadePalestranteEmEvento(li3,nomePalestrante)+ quantidadePalestranteEmEvento(li4,nomePalestrante);
-            if(qtdTotal>=1){
-                gotoxy(ALIN,22);printf("PALESTRANTE JA CADASTRADO EM EVENTO");
-            }else{
-                //////
-                //int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
-
-               // while(aux != NULL){
-                    //quantidade++;
-                    //if(quantidade==escolha){
-                        d->membro=&(aux->dados.nome);///////////////////  <---------------------MUDANDO AQUI!
-
-                    //}else{
-                       // gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
-                    //}
-                    //aux = aux->prox;
-                }
-
-                /////
-            }
-        }
-        aux = aux->prox;
-    }
-
-    /*
-    int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
-
-    while(aux != NULL){
-        quantidade++;
-        if(quantidade==escolha){
-            d->membro=&(aux->dados.nome);///////////////////  <---------------------MUDANDO AQUI!
-
-        }else{
-            gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
-        }
-        aux = aux->prox;
-    }*/
-//}
-
+    gotoxy(ALIN+7,18);gets(d->membro);
+}
 
 // INSERIR PARTICIPANTE ---------------------------------------------------------------
 //-------------------------------------------------------------------------------------
@@ -402,11 +328,9 @@ void inserir(LISTA *li, PARTICIPANTE c) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: O 
         }
     }gotoxy(ALIN,24);system("pause");
 }
-
-
-// INSERIR EVENTO PALESTRA ------------------------------------------------------------
+// INSERIR EVENTO ---------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
-void inserirEvento(LISTA3 *li, EVENTO2 d) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: O ENDEREÇO DA LISTA ; E OS DADOS DO CONTATO (QUE SERÃO ARMAZENADOS NA MINHA STRUCT CONTATO)
+void inserirEvento(LISTA2 *li, EVENTO c) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: O ENDEREÇO DA LISTA ; E OS DADOS DO CONTATO (QUE SERÃO ARMAZENADOS NA MINHA STRUCT CONTATO)
 {
     if(li==NULL) //CASO A LISTA NAO TENHA SIDO ALOCADA...
     {
@@ -414,10 +338,10 @@ void inserirEvento(LISTA3 *li, EVENTO2 d) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: 
     }
     else  //LISTA ALOCADA
     {
-        ELEM3 *novo = (ELEM3*) malloc(sizeof(ELEM3));//NESTE PASSO, SERÁ CRIADO UM NOVO ELEMENTO VAZIO (CRIADO APENAS O ESPAÇO NA MEMÓRIA)
+        ELEM2 *novo = (ELEM2*) malloc(sizeof(ELEM2));//NESTE PASSO, SERÁ CRIADO UM NOVO ELEMENTO VAZIO (CRIADO APENAS O ESPAÇO NA MEMÓRIA)
         if(novo != NULL) //CASO A ALOCAÇÃO DESTE NOVO ELEMENTO TENHA SIDO FEITA
         {
-            novo->dados= d;//O CAMPO DADOS, DA MINHA ESTRUTURA ELEMENTO RECEBE OS DADOS DO CONTATO PASSADO POR PARÂMETRO DA FUNÇÃO
+            novo->dados= c;//O CAMPO DADOS, DA MINHA ESTRUTURA ELEMENTO RECEBE OS DADOS DO CONTATO PASSADO POR PARÂMETRO DA FUNÇÃO
             if(li->inicio==NULL){//LISTA VAZIA
                 novo->prox=NULL;
                 novo->ant=NULL;
@@ -429,7 +353,7 @@ void inserirEvento(LISTA3 *li, EVENTO2 d) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: 
                     li->inicio->ant=novo;
                     li->inicio=novo;
                 }else{//INSERÇÃO NO MEIO OU FIM
-                    ELEM3 *ante,*aux=li->inicio;
+                    ELEM2 *ante,*aux=li->inicio;
                     while((aux!=NULL)&&(strcmp(aux->dados.tema,novo->dados.tema)<=0)){
                         ante=aux;
                         aux=aux->prox;
@@ -450,7 +374,6 @@ void inserirEvento(LISTA3 *li, EVENTO2 d) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: 
         }
     }gotoxy(ALIN,24);system("pause");
 }
-
 
 // LISTAR PARTICIPANTE-----------------------------------------------------------------
 //-------------------------------------------------------------------------------------
@@ -489,10 +412,9 @@ void listar(LISTA *li){
     }gotoxy(ALIN,12+cont);system("pause");
 }
 
-
-// LISTAR EVENTO PALESTRA-----------------------------------------------------------------------
+// LISTAR EVENTO-----------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
-void listarEvento(LISTA3 *li){
+void listarEvento(LISTA2 *li){
     system("cls");
     cabecalho();
     int cont=0;
@@ -508,7 +430,7 @@ void listarEvento(LISTA3 *li){
             gotoxy(ALIN,11);printf("LISTA VAZIA");
         }else{//HÁ ELEMENTO NA LISTA
             int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
-            ELEM3* aux = li->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
+            ELEM2* aux = li->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
 
             while(aux != NULL){
                 quantidade++;
@@ -570,7 +492,7 @@ void remover(LISTA *li, int pos){
 
 // REMOVER EVENTO ---------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
-void removerEvento(LISTA3 *li, int pos){
+void removerEvento(LISTA2 *li, int pos){
     //system("cls");
     cabecalho();
     if(li==NULL){
@@ -580,7 +502,7 @@ void removerEvento(LISTA3 *li, int pos){
             gotoxy(ALIN,23);printf("STATUS: Lista vazia");
         }else{
 
-            ELEM3*aux=li->inicio;
+            ELEM2*aux=li->inicio;
             int cont=1;
             if(cont==pos){//SE O ELEMENTO FOR O PRIMEIRO DA LISTA
                 li->inicio=aux->prox;
@@ -662,7 +584,7 @@ void editar(LISTA *li, int pos){
 // EDITAR EVENTO ----------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
-void editar2(LISTA3 *li, int pos, LISTA *lip){
+void editar2(LISTA2 *li, int pos){
     system("cls");
     cabecalho();
     if(li==NULL){//ERRO DE ALOCAÇÃO
@@ -671,13 +593,13 @@ void editar2(LISTA3 *li, int pos, LISTA *lip){
         if(li->inicio==NULL){ //LISTA VAZIA
             gotoxy(ALIN,22);printf("STATUS: Lista vazia");
         }else{
-            ELEM3*novo=li->inicio;
+            ELEM2*novo=li->inicio;
             int cont=1;
             while(novo!=NULL){
 
                 if(cont == pos){
 
-                //RECADASTRAR EVENTO ////////////////////////////////////////////////////////////
+                //RECADASTRAR PARTICIPANTE ////////////////////////////////////////////////////////////
                 system("cls"); //Limpar tela
 
                 cabecalho();
@@ -688,7 +610,7 @@ void editar2(LISTA3 *li, int pos, LISTA *lip){
                 gotoxy(ALIN,15);printf("CARGA HORARIA:");
                 gotoxy(ALIN,16);printf("HORARIO:");
                 gotoxy(ALIN,17);printf("TEMA:");
-                gotoxy(ALIN,18);printf("CODIGO DO PALESTRANTE:");
+                gotoxy(ALIN,18);printf("MEMBRO:");
                 gotoxy(ALIN,20);printf("______________________________________________________");
                 setbuf(stdin,NULL);
                 gotoxy(ALIN+11,13);scanf("%d", &novo->dados.capacidade);
@@ -701,29 +623,7 @@ void editar2(LISTA3 *li, int pos, LISTA *lip){
                 setbuf(stdin,NULL);
                 gotoxy(ALIN+5,17);gets(novo->dados.tema);
                 setbuf(stdin,NULL);
-
-                //////////////////////////////////////////
-                //OPÇÃO DE INSERÇÃO DO PARTICIPANTE NO EVENTO
-                int escolha;
-                gotoxy(ALIN+22,18);scanf("%d",&escolha);
-                int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
-                    ELEM* aux = lip->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
-
-                    while(aux != NULL && escolha!=quantidade){
-                        quantidade++;
-                        if(quantidade==escolha){
-                            novo->dados.membro=&(aux->dados.nome);///////////////////  <---------------------MUDANDO AQUI!
-
-                        }else{
-                            gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
-                            gotoxy(ALIN+22,18);scanf("%d",&escolha);
-                        }
-                        aux = aux->prox;
-                    }
-
-                //////////////////////////////////////////
-
-
+                gotoxy(ALIN+7,18);gets(novo->dados.membro);
                 }
                 cont++;novo=novo->prox;
             }
@@ -753,23 +653,6 @@ int tamanho(LISTA *li){
     return cont;//FUNÇÃO RETORNA A QUANTIRADE DE ELEMENTOS
 }
 
-// QUANTIDADE DO PALESTRA NOS EVENTOS -------------------------------------------------
-//-------------------------------------------------------------------------------------
-int quantidadePalestranteEmEvento(LISTA3 *li, char nomePalestrante[50]){
-    if(li==NULL){
-        return -1;//CASO MINHA LISTA NAO TENHA SIDO ALOCADA NA MEMÓRIA, MINHA FUNÇÃO RETORNARÁ O VALOR -1
-    }
-    int cont=0;//VARIAVEL QUE CONTARÁ A QUANTIDADE DE ELEMENTOS
-    ELEM3 *aux = li->inicio;//CRIA UM PONTEIRO AUXILIAR PARA PERCORRER MINHA LISTA. DESTA FORMA, CADA PASSO DADO PELO ELEMENTO AXULIAR SERÁ UM ELEMENTO DA MINHA LISTA
-    while(aux != NULL) //ENQUANTO O ELEMENTO AUXILIAR NAO APONTAR PARA NULL,
-    {
-        if(strcmp(aux->dados.membro,nomePalestrante)==0){
-        cont++;//INCREMENTA A MINHA LISTA (SE ELE ENTROU NO WHILE NA PRIMEIRA INTERAÇÃO, SIGNIFICA QUE HÁ PELO MENOS UM ELEMENTO DA LISTA
-        aux= aux->prox;//NESTE MOMENTO, NÓ RECEBERA O ENDEREÇO QUE ESTÁ NO CAMPO PRÓXIMO.
-    }//SE ELE FOR IGUAL A NULL. TERMINA O LAÇO. SE NAO, SERÁ CONTABILIZADO UM NOVO ELEMENTO.
-    }return cont;//FUNÇÃO RETORNA A QUANTIRADE DE ELEMENTOS
-}
-
 //------------------------------------------------------------------------------------
 main(){
 
@@ -779,14 +662,14 @@ main(){
     LISTA *liCongressista = criar(); // LISTA PARA PARTICIPANTES > CONGRESSISTA
     LISTA *liOrganizadores = criar(); // LISTA PARA PARTICIPANTES > ORGANIZADORES
     //LISTAS DOS EVENTOS:
-    LISTA3 *liPalestras = criar2(); // LISTA PARA EVENTOS > PALESTRAS
-    LISTA3 *liGrupos = criar2(); // LISTA PARA EVENTOS > GRUPOS
-    LISTA3 *liCursos= criar2(); // LISTA PARA EVENTOS > CURSOS
-    LISTA3 *liOficinas= criar2(); // LISTA PARA EVENTOS > OFICINAS
+    LISTA2 *liPalestras = criar(); // LISTA PARA EVENTOS > PALESTRAS
+    LISTA2 *liGrupos = criar(); // LISTA PARA EVENTOS > GRUPOS
+    LISTA2 *liCursos= criar(); // LISTA PARA EVENTOS > CURSOS
+    LISTA2 *liOficinas= criar(); // LISTA PARA EVENTOS > OFICINAS
 
     //VARIÁVEIS:
     PARTICIPANTE c;//CRIA UMA ESTRUTURA DO "TIPO" STRUCT PARTICIPANTE.
-    EVENTO2 d;
+    EVENTO d; //CRIA UMA ESTRUTURA DO "TIPO" STRUCT EVENTO.
     int o1, o2, pos, tam; //RESPOSTA DO MENU1, MENU2, POSIÇÃO PARA REMOVER ELEMENTO DA LISTA, TAMANHO DA LISTA
 
     while((o1=menu1())!=0){
@@ -895,13 +778,13 @@ main(){
                 }
 
 
-            // EVENTOS: /////////////////////////////////////////////////////////////////////////////////////////////////
+            // EVENTOS: ////////////////////////////////////////////////////////////////////////////
 
             }else{
             if(o1==4){ // ESCOLHA DE PALESTRAS
                 switch(o2){
                 case 1: //INSERIR PALESTRAS
-                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
+                    cadastrarEvento(o1,&d);
                     inserirEvento(liPalestras,d);
                     break;
                 case 2: //LISTAR PALESTRAS
@@ -914,7 +797,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liPalestras,pos,liPalestrante);break;
+                    editar2(liPalestras,pos);break;
                 case 4://REMOVER PALESTRAS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
@@ -931,7 +814,7 @@ main(){
             if(o1==5){ // ESCOLHA DE GRUPOS
                 switch(o2){
                 case 1: //INSERIR GRUPOS
-                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
+                    cadastrarEvento(o1,&d);
                     inserirEvento(liGrupos,d);
                     break;
                 case 2: //LISTAR GRUPOS
@@ -944,7 +827,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liGrupos,pos,liPalestrante);break;
+                    editar2(liGrupos,pos);break;
                 case 4://REMOVER GRUPOS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
@@ -961,7 +844,7 @@ main(){
             if(o1==6){ // ESCOLHA DE CURSOS
                 switch(o2){
                 case 1: //INSERIR CURSOS
-                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
+                    cadastrarEvento(o1,&d);
                     inserirEvento(liCursos,d);
                     break;
                 case 2: //LISTAR CURSOS
@@ -974,7 +857,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liCursos,pos,liPalestrante);break;
+                    editar2(liCursos,pos);break;
                 case 4://REMOVER CURSOS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
@@ -991,7 +874,7 @@ main(){
             if(o1==7){ // ESCOLHA DE OFICINAS
                 switch(o2){
                 case 1: //INSERIR OFICINAS
-                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
+                    cadastrarEvento(o1,&d);
                     inserirEvento(liOficinas,d);
                     break;
                 case 2: //LISTAR OFICINAS
@@ -1004,7 +887,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liOficinas,pos,liPalestrante);break;
+                    editar2(liOficinas,pos);break;
                 case 4://REMOVER OFICINAS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
@@ -1018,5 +901,4 @@ main(){
                     gotoxy(ALIN,23);printf("STATUS: OPCAO INVALIDA");
                 }
     }}}}}}}}}
-
 
