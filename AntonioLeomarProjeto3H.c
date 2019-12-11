@@ -5,6 +5,7 @@
 #include <windows.h> //biblioteca para uso da função gotoxy e Sleep
 //HAHAHAHAHHA
 //hhehehhehe
+//teste
 //-----------------------------------------------------------------------------------
 //Constantes e variáveis Globais
 #define ALIN 15 //alinhamento horizontal da tela
@@ -1103,3 +1104,4 @@ main(){
                 }
     }}}}}}}}}
 
+//antonio
