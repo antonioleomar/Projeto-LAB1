@@ -103,7 +103,7 @@ LISTA* criar(){
 // CRIAR LISTA DE EVENTOS: ------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 LISTA* criar2(){
-    LISTA2* li = (LISTA2*) malloc(sizeof(LISTA2)); //ALOCA O ESPAÇO NA MEMÓRIA
+    LISTA3* li = (LISTA3*) malloc(sizeof(LISTA3)); //ALOCA O ESPAÇO NA MEMÓRIA
     if(li != NULL) //SE O SISTEMA OPERACIONAL ALOCAR, ENTRA NO IF.
     {
         li->inicio= NULL; //INICIA A POSIÇÃO INICIAL COM NULL
@@ -220,10 +220,10 @@ void cadastrarParticipante(int o1, PARTICIPANTE *c){
 }
 
 
-// FUNÇÃO CADASTRAR EVENTOS> PALESTRA -----------------------------------------------------------
+// FUNÇÃO CADASTRAR EVENTOS -----------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
-void cadastrarEvento(int o1, EVENTO2 *d2, LISTA *li){ //RECEBER LISTA EX.: PALESTRA
+void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li){ //RECEBER LISTA EX.: PALESTRA
     system("cls"); //Limpar tela
     int op, escolha;
 
@@ -240,82 +240,87 @@ void cadastrarEvento(int o1, EVENTO2 *d2, LISTA *li){ //RECEBER LISTA EX.: PALES
     setbuf(stdin,NULL);
 
     if(o1==4){
-        gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
-        while(d2->capacidade>150){
+        gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
+        while(d->capacidade>150){
             gotoxy(ALIN,22);printf("STATUS: CAPACIDADE MAXIMA DE 150");
             //setbuf(stdin,NULL);
-            gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
+            gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
         }
     }else{
         if(o1==5){
-            gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
-            while(d2->capacidade>50){
+            gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
+            while(d->capacidade>50){
                 gotoxy(ALIN,22);printf("STATUS: CAPACIDADE MAXIMA DE 50");
                 //setbuf(stdin,NULL);
-                gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
+                gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
             }
         }else{
             if(o1==6){
-                gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
-                while(d2->capacidade>40){
+                gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
+                while(d->capacidade>40){
                     gotoxy(ALIN,22);printf("STATUS: CAPACIDADE MAXIMA DE 40");
                     //setbuf(stdin,NULL);
-                    gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
+                    gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
                 }
             }else{
-                gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
-                while(d2->capacidade>40){
+                gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
+                while(d->capacidade>40){
                     gotoxy(ALIN,22);printf("STATUS: CAPACIDADE MAXIMA DE 40");
                     //setbuf(stdin,NULL);
-                    gotoxy(ALIN+11,13);scanf("%d",&d2->capacidade);
+                    gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
                 }
             }
         }
     }
 
-    //gotoxy(ALIN+11,13);scanf("%d",&d->capacidade);
     setbuf(stdin,NULL);
-    gotoxy(ALIN+6,14);gets(d2->local);
+    gotoxy(ALIN+6,14);gets(d->local);
     setbuf(stdin,NULL);
-    gotoxy(ALIN+14,15);scanf("%d",&d2->cargaHoraria);
+    gotoxy(ALIN+14,15);scanf("%d",&d->cargaHoraria);
     setbuf(stdin,NULL);
     if(o1==5||o1==6||o1==7){
-        gotoxy(ALIN+8,16);scanf("%d",&d2->horario);
-        while(d2->horario<12){
+        gotoxy(ALIN+8,16);scanf("%d",&d->horario);
+        while(d->horario<12){
             gotoxy(ALIN,22);printf("STATUS: HORARIO APENAS A TARDE");
             //setbuf(stdin,NULL);
-            gotoxy(ALIN+8,16);scanf("%d",&d2->horario);
+            gotoxy(ALIN+8,16);scanf("%d",&d->horario);
         }
     }else{
-        gotoxy(ALIN+8,16);scanf("%d",&d2->horario);
-        while(d2->horario>12){
+        gotoxy(ALIN+8,16);scanf("%d",&d->horario);
+        while(d->horario>12){
             gotoxy(ALIN,22);printf("STATUS: HORARIO DAS PALESTRAS APENAS PELA MANHA");
             //setbuf(stdin,NULL);
-            gotoxy(ALIN+8,16);scanf("%d",&d2->horario);
+            gotoxy(ALIN+8,16);scanf("%d",&d->horario);
         }
     }
     //gotoxy(ALIN+8,16);scanf("%d",&d->horario);
     setbuf(stdin,NULL);
-    gotoxy(ALIN+5,17);gets(d2->tema);
+    gotoxy(ALIN+5,17);gets(d->tema);
     setbuf(stdin,NULL);
-    gotoxy(ALIN+15,18);scanf("%d",&escolha);
 
 
+    //OPÇÃO DE INSERÇÃO DO PARTICIPANTE NO EVENTO
+    int tam;
+    tam=tamanho(li);
+    gotoxy(ALIN+22,18);scanf("%d",&escolha);
+    while(escolha>tam){ //SE A ESCOLHA ESTIVER ACIMA DO NUMERO DE PALESTRANTES
+        gotoxy(ALIN+22,18);scanf("%d",&escolha);
+    }
     int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
-        ELEM* aux = li->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
+    ELEM* aux = li->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
 
-        while(aux != NULL && escolha!=quantidade){
-            quantidade++;
-            if(quantidade==escolha){
-                d2->membro=&(aux->dados.nome);///////////////////  <---------------------MUDANDO AQUI!
+    while(aux != NULL){
+        quantidade++;
+        if(quantidade==escolha){
+            d->membro=&(aux->dados.nome);///////////////////  <---------------------MUDANDO AQUI!
 
-            }else{
-                gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
-            }
-            aux = aux->prox;
+        }else{
+            gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
         }
-
+        aux = aux->prox;
+    }
 }
+
 
 // INSERIR PARTICIPANTE ---------------------------------------------------------------
 //-------------------------------------------------------------------------------------
@@ -370,7 +375,7 @@ void inserir(LISTA *li, PARTICIPANTE c) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: O 
 
 // INSERIR EVENTO PALESTRA ------------------------------------------------------------
 //-------------------------------------------------------------------------------------
-void inserirEvento(LISTA3 *li, EVENTO2 d2) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: O ENDEREÇO DA LISTA ; E OS DADOS DO CONTATO (QUE SERÃO ARMAZENADOS NA MINHA STRUCT CONTATO)
+void inserirEvento(LISTA3 *li, EVENTO2 d) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS: O ENDEREÇO DA LISTA ; E OS DADOS DO CONTATO (QUE SERÃO ARMAZENADOS NA MINHA STRUCT CONTATO)
 {
     if(li==NULL) //CASO A LISTA NAO TENHA SIDO ALOCADA...
     {
@@ -381,7 +386,7 @@ void inserirEvento(LISTA3 *li, EVENTO2 d2) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS:
         ELEM3 *novo = (ELEM3*) malloc(sizeof(ELEM3));//NESTE PASSO, SERÁ CRIADO UM NOVO ELEMENTO VAZIO (CRIADO APENAS O ESPAÇO NA MEMÓRIA)
         if(novo != NULL) //CASO A ALOCAÇÃO DESTE NOVO ELEMENTO TENHA SIDO FEITA
         {
-            novo->dados= d2;//O CAMPO DADOS, DA MINHA ESTRUTURA ELEMENTO RECEBE OS DADOS DO CONTATO PASSADO POR PARÂMETRO DA FUNÇÃO
+            novo->dados= d;//O CAMPO DADOS, DA MINHA ESTRUTURA ELEMENTO RECEBE OS DADOS DO CONTATO PASSADO POR PARÂMETRO DA FUNÇÃO
             if(li->inicio==NULL){//LISTA VAZIA
                 novo->prox=NULL;
                 novo->ant=NULL;
@@ -393,7 +398,7 @@ void inserirEvento(LISTA3 *li, EVENTO2 d2) //COMO PARÂMETROS DA FUNÇÃO, TEREMOS:
                     li->inicio->ant=novo;
                     li->inicio=novo;
                 }else{//INSERÇÃO NO MEIO OU FIM
-                    ELEM2 *ante,*aux=li->inicio;
+                    ELEM3 *ante,*aux=li->inicio;
                     while((aux!=NULL)&&(strcmp(aux->dados.tema,novo->dados.tema)<=0)){
                         ante=aux;
                         aux=aux->prox;
@@ -534,7 +539,7 @@ void remover(LISTA *li, int pos){
 
 // REMOVER EVENTO ---------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
-void removerEvento(LISTA2 *li, int pos){
+void removerEvento(LISTA3 *li, int pos){
     //system("cls");
     cabecalho();
     if(li==NULL){
@@ -544,7 +549,7 @@ void removerEvento(LISTA2 *li, int pos){
             gotoxy(ALIN,23);printf("STATUS: Lista vazia");
         }else{
 
-            ELEM2*aux=li->inicio;
+            ELEM3*aux=li->inicio;
             int cont=1;
             if(cont==pos){//SE O ELEMENTO FOR O PRIMEIRO DA LISTA
                 li->inicio=aux->prox;
@@ -626,7 +631,7 @@ void editar(LISTA *li, int pos){
 // EDITAR EVENTO ----------------------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
-void editar2(LISTA2 *li, int pos){
+void editar2(LISTA3 *li, int pos, LISTA *lip){
     system("cls");
     cabecalho();
     if(li==NULL){//ERRO DE ALOCAÇÃO
@@ -635,13 +640,13 @@ void editar2(LISTA2 *li, int pos){
         if(li->inicio==NULL){ //LISTA VAZIA
             gotoxy(ALIN,22);printf("STATUS: Lista vazia");
         }else{
-            ELEM2*novo=li->inicio;
+            ELEM3*novo=li->inicio;
             int cont=1;
             while(novo!=NULL){
 
                 if(cont == pos){
 
-                //RECADASTRAR PARTICIPANTE ////////////////////////////////////////////////////////////
+                //RECADASTRAR EVENTO ////////////////////////////////////////////////////////////
                 system("cls"); //Limpar tela
 
                 cabecalho();
@@ -652,7 +657,7 @@ void editar2(LISTA2 *li, int pos){
                 gotoxy(ALIN,15);printf("CARGA HORARIA:");
                 gotoxy(ALIN,16);printf("HORARIO:");
                 gotoxy(ALIN,17);printf("TEMA:");
-                gotoxy(ALIN,18);printf("MEMBRO:");
+                gotoxy(ALIN,18);printf("CODIGO DO PALESTRANTE:");
                 gotoxy(ALIN,20);printf("______________________________________________________");
                 setbuf(stdin,NULL);
                 gotoxy(ALIN+11,13);scanf("%d", &novo->dados.capacidade);
@@ -665,7 +670,29 @@ void editar2(LISTA2 *li, int pos){
                 setbuf(stdin,NULL);
                 gotoxy(ALIN+5,17);gets(novo->dados.tema);
                 setbuf(stdin,NULL);
-                gotoxy(ALIN+7,18);gets(novo->dados.membro);
+
+                //////////////////////////////////////////
+                //OPÇÃO DE INSERÇÃO DO PARTICIPANTE NO EVENTO
+                int escolha;
+                gotoxy(ALIN+22,18);scanf("%d",&escolha);
+                int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
+                    ELEM* aux = lip->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
+
+                    while(aux != NULL && escolha!=quantidade){
+                        quantidade++;
+                        if(quantidade==escolha){
+                            novo->dados.membro=&(aux->dados.nome);///////////////////  <---------------------MUDANDO AQUI!
+
+                        }else{
+                            gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
+                            gotoxy(ALIN+22,18);scanf("%d",&escolha);
+                        }
+                        aux = aux->prox;
+                    }
+
+                //////////////////////////////////////////
+
+
                 }
                 cont++;novo=novo->prox;
             }
@@ -695,6 +722,23 @@ int tamanho(LISTA *li){
     return cont;//FUNÇÃO RETORNA A QUANTIRADE DE ELEMENTOS
 }
 
+// QUANTIDADE DO PALESTRA NOS EVENTOS -------------------------------------------------
+//-------------------------------------------------------------------------------------
+int quantidadePalestranteEmEvento(LISTA3 *li, char nomePalestrante[50]){
+    if(li==NULL){
+        return -1;//CASO MINHA LISTA NAO TENHA SIDO ALOCADA NA MEMÓRIA, MINHA FUNÇÃO RETORNARÁ O VALOR -1
+    }
+    int cont=0;//VARIAVEL QUE CONTARÁ A QUANTIDADE DE ELEMENTOS
+    ELEM3 *aux = li->inicio;//CRIA UM PONTEIRO AUXILIAR PARA PERCORRER MINHA LISTA. DESTA FORMA, CADA PASSO DADO PELO ELEMENTO AXULIAR SERÁ UM ELEMENTO DA MINHA LISTA
+    while(aux != NULL) //ENQUANTO O ELEMENTO AUXILIAR NAO APONTAR PARA NULL,
+    {
+        if(strcmp(aux->dados.membro,nomePalestrante)==0){
+        cont++;//INCREMENTA A MINHA LISTA (SE ELE ENTROU NO WHILE NA PRIMEIRA INTERAÇÃO, SIGNIFICA QUE HÁ PELO MENOS UM ELEMENTO DA LISTA
+        aux= aux->prox;//NESTE MOMENTO, NÓ RECEBERA O ENDEREÇO QUE ESTÁ NO CAMPO PRÓXIMO.
+    }//SE ELE FOR IGUAL A NULL. TERMINA O LAÇO. SE NAO, SERÁ CONTABILIZADO UM NOVO ELEMENTO.
+    }return cont;//FUNÇÃO RETORNA A QUANTIRADE DE ELEMENTOS
+}
+
 //------------------------------------------------------------------------------------
 main(){
 
@@ -711,8 +755,7 @@ main(){
 
     //VARIÁVEIS:
     PARTICIPANTE c;//CRIA UMA ESTRUTURA DO "TIPO" STRUCT PARTICIPANTE.
-    EVENTO d; //CRIA UMA ESTRUTURA DO "TIPO" STRUCT EVENTO.
-    EVENTO2 d2;
+    EVENTO2 d;
     int o1, o2, pos, tam; //RESPOSTA DO MENU1, MENU2, POSIÇÃO PARA REMOVER ELEMENTO DA LISTA, TAMANHO DA LISTA
 
     while((o1=menu1())!=0){
@@ -827,8 +870,8 @@ main(){
             if(o1==4){ // ESCOLHA DE PALESTRAS
                 switch(o2){
                 case 1: //INSERIR PALESTRAS
-                    cadastrarEvento(o1,&d2,liPalestrante);
-                    inserirEvento2(liPalestras,d2);
+                    cadastrarEvento(o1,&d,liPalestrante);
+                    inserirEvento(liPalestras,d);
                     break;
                 case 2: //LISTAR PALESTRAS
                     listarEvento(liPalestras);
@@ -840,7 +883,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liPalestras,pos);break;
+                    editar2(liPalestras,pos,liPalestrante);break;
                 case 4://REMOVER PALESTRAS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
@@ -857,7 +900,7 @@ main(){
             if(o1==5){ // ESCOLHA DE GRUPOS
                 switch(o2){
                 case 1: //INSERIR GRUPOS
-                    cadastrarEvento(o1,&d);
+                    cadastrarEvento(o1,&d,liPalestrante);
                     inserirEvento(liGrupos,d);
                     break;
                 case 2: //LISTAR GRUPOS
@@ -870,7 +913,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liGrupos,pos);break;
+                    editar2(liGrupos,pos,liPalestrante);break;
                 case 4://REMOVER GRUPOS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
@@ -887,7 +930,7 @@ main(){
             if(o1==6){ // ESCOLHA DE CURSOS
                 switch(o2){
                 case 1: //INSERIR CURSOS
-                    cadastrarEvento(o1,&d);
+                    cadastrarEvento(o1,&d,liPalestrante);
                     inserirEvento(liCursos,d);
                     break;
                 case 2: //LISTAR CURSOS
@@ -900,7 +943,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liCursos,pos);break;
+                    editar2(liCursos,pos,liPalestrante);break;
                 case 4://REMOVER CURSOS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
@@ -917,7 +960,7 @@ main(){
             if(o1==7){ // ESCOLHA DE OFICINAS
                 switch(o2){
                 case 1: //INSERIR OFICINAS
-                    cadastrarEvento(o1,&d);
+                    cadastrarEvento(o1,&d,liPalestrante);
                     inserirEvento(liOficinas,d);
                     break;
                 case 2: //LISTAR OFICINAS
@@ -930,7 +973,7 @@ main(){
                     gotoxy(ALIN,13);printf("Digite o codigo do evento que sera editado >> ");
                     gotoxy(ALIN,22);printf("______________________________________________________");
                     gotoxy(ALIN+48,13);scanf("%d",&pos);
-                    editar2(liOficinas,pos);break;
+                    editar2(liOficinas,pos,liPalestrante);break;
                 case 4://REMOVER OFICINAS
                     cabecalho();
                     gotoxy(ALIN,9);printf("#MENU 3: Remover");
