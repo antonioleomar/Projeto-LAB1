@@ -223,7 +223,7 @@ void cadastrarParticipante(int o1, PARTICIPANTE *c){
 // FUNÇÃO CADASTRAR EVENTOS -----------------------------------------------------------
 //-------------------------------------------------------------------------------------
 
-void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li){ //RECEBER LISTA EX.: PALESTRA
+void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li, LISTA3 *li1, LISTA3 *li2, LISTA3 *li3, LISTA3 *li4){ //RECEBER LISTA EX.: PALESTRANTE
     system("cls"); //Limpar tela
     int op, escolha;
 
@@ -300,14 +300,47 @@ void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li){ //RECEBER LISTA EX.: PALEST
 
 
     //OPÇÃO DE INSERÇÃO DO PARTICIPANTE NO EVENTO
-    int tam;
+    int tam, cont=0, qtdTotal;
+    char nomePalestrante[50];
     tam=tamanho(li);
     gotoxy(ALIN+22,18);scanf("%d",&escolha);
+
     while(escolha>tam){ //SE A ESCOLHA ESTIVER ACIMA DO NUMERO DE PALESTRANTES
         gotoxy(ALIN+22,18);scanf("%d",&escolha);
     }
-    int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
+
     ELEM* aux = li->inicio;//CRIA-SE UM ELEMENTO AUXILIAR PARA PERCORRER A LISTA. RECERÁ O ENDEREÇO DO PRIMEIRO ELEMENTO DA LISTA
+
+    while(aux!=NULL){
+        cont++;
+        if(cont==escolha){
+            strcpy(nomePalestrante,aux->dados.nome);
+            qtdTotal=quantidadePalestranteEmEvento(li1,nomePalestrante)+quantidadePalestranteEmEvento(li2,nomePalestrante)+ quantidadePalestranteEmEvento(li3,nomePalestrante)+ quantidadePalestranteEmEvento(li4,nomePalestrante);
+            if(qtdTotal>=1){
+                gotoxy(ALIN,22);printf("PALESTRANTE JA CADASTRADO EM EVENTO");
+            }else{
+                //////
+                int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
+
+                while(aux != NULL){
+                    quantidade++;
+                    if(quantidade==escolha){
+                        d->membro=&(aux->dados.nome);///////////////////  <---------------------MUDANDO AQUI!
+
+                    }else{
+                        gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
+                    }
+                    aux = aux->prox;
+                }
+
+                /////
+            }
+        }
+        aux = aux->prox;
+    }
+
+    /*
+    int quantidade=0;//VARIAVEL PARA CONTAR OS CONTATOS
 
     while(aux != NULL){
         quantidade++;
@@ -318,7 +351,7 @@ void cadastrarEvento(int o1, EVENTO2 *d, LISTA *li){ //RECEBER LISTA EX.: PALEST
             gotoxy(ALIN,22);printf("STATUS: PALESTRANTE NAO ENCONTRADO");
         }
         aux = aux->prox;
-    }
+    }*/
 }
 
 
@@ -870,7 +903,7 @@ main(){
             if(o1==4){ // ESCOLHA DE PALESTRAS
                 switch(o2){
                 case 1: //INSERIR PALESTRAS
-                    cadastrarEvento(o1,&d,liPalestrante);
+                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
                     inserirEvento(liPalestras,d);
                     break;
                 case 2: //LISTAR PALESTRAS
@@ -900,7 +933,7 @@ main(){
             if(o1==5){ // ESCOLHA DE GRUPOS
                 switch(o2){
                 case 1: //INSERIR GRUPOS
-                    cadastrarEvento(o1,&d,liPalestrante);
+                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
                     inserirEvento(liGrupos,d);
                     break;
                 case 2: //LISTAR GRUPOS
@@ -930,7 +963,7 @@ main(){
             if(o1==6){ // ESCOLHA DE CURSOS
                 switch(o2){
                 case 1: //INSERIR CURSOS
-                    cadastrarEvento(o1,&d,liPalestrante);
+                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
                     inserirEvento(liCursos,d);
                     break;
                 case 2: //LISTAR CURSOS
@@ -960,7 +993,7 @@ main(){
             if(o1==7){ // ESCOLHA DE OFICINAS
                 switch(o2){
                 case 1: //INSERIR OFICINAS
-                    cadastrarEvento(o1,&d,liPalestrante);
+                    cadastrarEvento(o1,&d,liPalestrante,liPalestras,liGrupos,liCursos,liOficinas);
                     inserirEvento(liOficinas,d);
                     break;
                 case 2: //LISTAR OFICINAS
